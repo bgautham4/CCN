@@ -1,2 +1,3 @@
 # CCN
-Code, captures and everything needed for CCN project.
+Code, captures and everything needed for CCN project go here.
+
