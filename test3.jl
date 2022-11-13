@@ -1,3 +1,4 @@
+#This is a test function intended to verify the working of functions in GetInfo.jl
 include("GetInfo.jl")
 
 print("Getting network details : ")
