@@ -66,20 +66,18 @@ end
 
 function get_hosts_arp(my_ip::IPv4,default_gateway::IPv4) 
 	addrs = open("arp.txt") do f
-		text = readlines(f)
-		i = 2
 		addrs = []
-		while true
-			try 
-				addr = IPv4(split(text[i]," ")[1])
-				!(isequal(addr,my_ip)||isequal(addr,default_gateway)) && push!(addrs,addr)
-			catch e
-				if isa(e,BoundsError)
-					return addrs
-				end
-			end
-			i+=1
+		readline(f)
+		while !eof(f)
+			mark(f)
+			ip_ad = IPv4(readuntil(f," "))
+			reset(f)
+			skip(f,41)
+			mac_addr = readuntil(f," ")
+			!(isequal(ip_ad,default_gateway) || isequal(mac_addr,"00:00:00:00:00:00")) && push!(addrs,ip_ad) 
+			readline(f)
 		end
+		return addrs
 	end
 	return addrs
 end
