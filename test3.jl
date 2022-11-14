@@ -23,4 +23,11 @@ for dev in devices
 	print("Host @ $(dev) is up.\n")
 end
 
-print("Done!\n")
+print("******************\n")
+
+print("Finding listeners on port 2000....\n")
+filtered_hosts = get_open_ports(devices,2000)
+
+for host in values(filtered_hosts)
+	print("Found $(host) !\n")
+end

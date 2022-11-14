@@ -52,6 +52,7 @@ function get_hosts(my_ip::IPv4,default_gateway::IPv4)
 			i+=2
 		end
 	end
+	#run(`rm hosts.txt`)
 	return addrs
 end
 
@@ -79,7 +80,28 @@ function get_hosts_arp(my_ip::IPv4,default_gateway::IPv4)
 		end
 		return addrs
 	end
+	#run(`rm arp.txt`)
 	return addrs
 end
 
-
+function get_open_ports(addrs,port)
+	hosts = Dict()
+	i = 1
+	for addr in addrs
+		open("temp.txt","w") do f
+			redirect_stdio(stdout = f) do
+				run(`nmap -Pn -p$(port) $(addr)`)
+			end
+		end
+		
+		status = open("temp.txt") do f
+			readuntil(f,"$(port)/tcp")
+			skip(f,1)
+			readuntil(f," ")
+		end
+		isequal(status,"open") && (hosts[i] = addr)
+		i+=1
+	end
+	run(`rm temp.txt`)
+	return hosts
+end
