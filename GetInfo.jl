@@ -99,8 +99,7 @@ function get_open_ports(addrs,port)
 			skip(f,1)
 			readuntil(f," ")
 		end
-		isequal(status,"open") && (hosts[i] = addr)
-		i+=1
+		isequal(status,"open") && (hosts[i] = addr;i+=1)	
 	end
 	run(`rm temp.txt`)
 	return hosts
