@@ -53,6 +53,7 @@ run(`mv segments/$(my_id).txt pool_storage/$(my_id)/`)
         device_ip = IPv4(read(get_ip,String))
         close(get_ip)
         write_sock = connect(device_ip,2001)
+        write(write_sock,"STORE,$(my_ip),$(my_id)\n")  #Init command to the storage pool device of the form STORE,dev_ip,dev_id\n
         open("segments/$(device).txt") do f
             #=while !eof(f)
                 write(write_sock,read(f,Char))
@@ -67,6 +68,29 @@ run(`rm -rf segments/`)
 
 print("Press any key to retrieve files back from the pool.")
 readline(stdin)
+
+@sync for device in pool_ids
+    println("Retrieving from $(device)...")
+    @async begin
+        get_ip = connect(server_ip,2000)
+        write(get_ip,"GET,$(my_id),$(device)\n") #Request for pool device ip.
+        device_ip = IPv4(read(get_ip,String))
+        close(get_ip)
+        read_sock = connect(device_ip,2001)
+        write(write_sock,"FWD,$(my_ip),$(my_id)\n")  #Init command to the storage pool device of the form STORE/FWD,dev_ip,dev_id\n
+        open("pool_storage/$(my_id)/$(device).txt","w") do f
+            #=while !eof(f)
+                write(write_sock,read(f,Char))
+            end=#
+            text = read(read_sock,String)
+            write(f,text)
+        end
+        close(read_sock)
+    end
+end
+combine_files(N_pool,"pool_storage/$(my_id)/")
+println("Retrieved file from the pool successfully!")
+
 
 
 

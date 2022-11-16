@@ -19,8 +19,8 @@ function divide_file(file::IO,n_segs::Int,dest::String="")
     end
 end
 
-function combine_files(n_segs::Int,path::String="")
-    open("combine.txt","w") do f
+function combine_files(n_segs::Int,path::String="",dest::String="")
+    open("$(dest)combine.txt","w") do f
         for i in 1:n_segs
             open("$(path)$(i).txt") do f2
                 while !eof(f2)

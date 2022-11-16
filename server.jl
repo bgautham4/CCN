@@ -54,11 +54,11 @@ while true
 	@async begin  # @async allows the simultaneous handling of multiple connections.
 		try
 			request = readline(conn)  #Request of the form GET,src_dev,needed_dev\n
-			req_arr = split(request,",")
-			needed_id = parse(Int,req_arr[3])
+			cmd,src_dev,needed_dev = split(request,",")
+			needed_id = parse(Int,needed_dev)
 			write(conn,"$(pool[needed_id])")
-			println("Device $(req_arr[2]) @ $(pool[parse(Int,req_arr[2])]) asked for $(needed_id)")
 			close(conn)
+			println("Device $(src_dev) @ $(pool[parse(Int,src_dev)]) asked for $(needed_dev)")
 		catch e
 			println("An error has occured!")
 			write(conn,"An invalid query was possibly made!")
