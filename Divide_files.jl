@@ -1,4 +1,4 @@
-function devide_file(file::IO,n_segs::Int,dest::String="")
+function divide_file(file::IO,n_segs::Int,dest::String="")
     size = position(seekend(file))
     seg_size = size ÷ n_segs
     seekstart(file)

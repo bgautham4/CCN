@@ -40,13 +40,30 @@ N_pool = length(pool) # find out the number of devices in the pool.
 @sync for device_id in keys(pool)
 	@async begin
 		info_sock = connect(pool[device_id], 2000)
-		write(info_sock, "Controller @ $(my_ip) says your device id is $(device_id) and $(N_pool) device(s) are in the pool.")
+		write(info_sock, "$(my_ip),$(device_id),$(N_pool)")
 		#readline(conn, keep=true)
 		println("Sent Pool info and device id to $(device_id) with ip address $(pool[device_id]))")
 		close(info_sock)
 	end
 end
 
+control = listen(my_ip,2000)
+println("Waiting for requests.....")
+while true
+	conn = accept(control)
+	@async begin  # @async allows the simultaneous handling of multiple connections.
+		try
+			request = readline(conn)  #Request of the form GET,src_dev,needed_dev\n
+			req_arr = split(request,",")
+			needed_id = parse(Int,req_arr[3])
+			write(conn,"$(pool[needed_id])")
+			println("Device $(req_arr[2]) @ $(pool[parse(Int,req_arr[2])]) asked for $(needed_id)")
+			close(conn)
+		catch e
+			println("An error has occured!")
+			write(conn,"An invalid query was possibly made!")
+			close(conn)
+		end
+	end
+end
 
-	
-	
