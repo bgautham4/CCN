@@ -43,7 +43,7 @@ open("$(file_name)") do f
     divide_file(f,N_pool,"segments/")
 end
 
-run(`rm $(filename)`)
+run(`rm $(file_name)`)
 run(`mv segments/$(my_id).txt pool_storage/$(my_id)/`)
 
 @sync for device in pool_ids
@@ -77,7 +77,7 @@ readline(stdin)
         device_ip = IPv4(read(get_ip,String))
         close(get_ip)
         read_sock = connect(device_ip,2001)
-        write(write_sock,"FWD,$(my_ip),$(my_id)\n")  #Init command to the storage pool device of the form STORE/FWD,dev_ip,dev_id\n
+        write(read_sock,"FWD,$(my_ip),$(my_id)\n")  #Init command to the storage pool device of the form STORE/FWD,dev_ip,dev_id\n
         open("pool_storage/$(my_id)/$(device).txt","w") do f
             #=while !eof(f)
                 write(write_sock,read(f,Char))

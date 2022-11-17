@@ -60,7 +60,7 @@ while true
 			close(conn)
 			println("Device $(src_dev) @ $(pool[parse(Int,src_dev)]) asked for $(needed_dev)")
 		catch e
-			println("An error has occured!")
+			println("An error has occured! An invalid query was possibly made.")
 			write(conn,"An invalid query was possibly made!")
 			close(conn)
 		end

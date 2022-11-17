@@ -36,12 +36,14 @@ for i in 1:N_pool
 end
 
 respond_sock = listen(my_ip,2001)
-
+print("Waiting for queries.....\n")
 while true
     conn = accept(respond_sock)
+    print("Serving device....\n")
     @async begin
-        msg = readline(conn)
         try
+            msg = readline(conn)
+            println("$(msg)")
             cmd,dev_ip,dev_id = split(msg,",")
             if isequal(cmd,"STORE")
                 open("pool_storage/$(dev_id)/$(dev_id).txt","w") do f
