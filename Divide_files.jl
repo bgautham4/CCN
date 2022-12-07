@@ -11,9 +11,7 @@ function divide_file(file::IO,n_segs::Int,dest::String="")
             end
         else
             open("$(dest)$(i).txt","w") do f
-                while !eof(file)
-                    write(f,read(file,Char))
-                end
+               write(f,read(file,String))
             end
         end  
     end
@@ -23,14 +21,10 @@ function combine_files(n_segs::Int,path::String="",dest::String="")
     open("$(dest)combine.txt","w") do f
         for i in 1:n_segs
             open("$(path)$(i).txt") do f2
-                while !eof(f2)
-                    write(f,read(f2,Char))
-                end
+                write(f,read(f2,String))
             end
         end
     end
 end
 
 
-        
-   
