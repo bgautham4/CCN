@@ -53,7 +53,6 @@ function get_hosts(my_ip::IPv4,default_gateway::IPv4)
 		end
 	end
 	#run(`rm hosts.txt`)
-	return addrs
 end
 
 #Use arp_table_gen! and get_hosts_arp if windows firewall blocks the icmp request messages used by nmap to discover hosts on the network.
@@ -84,7 +83,7 @@ function get_hosts_arp(my_ip::IPv4,default_gateway::IPv4)
 	return addrs
 end
 
-function get_open_ports(addrs,port)
+function get_open_ports(addrs,port)   #Return all hosts on the LAN who are listening on port = 𝐩𝐨𝐫𝐭	 
 	hosts = Dict()
 	i = 1
 	for addr in addrs

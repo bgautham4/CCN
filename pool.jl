@@ -30,7 +30,7 @@ server_ip = IPv4(data_arr[1])
 my_id = parse(Int,data_arr[2])
 N_pool = parse(Int,data_arr[3])
 pool_ids = [i for i in 1:N_pool if i!=my_id]
-#Initialize some directories..
+#Initialize some directories..(NOTE: Remeber to delete these directories before every run.)
 for i in 1:N_pool
     run(`mkdir -p pool_storage/$(i)`)
 end
@@ -53,7 +53,7 @@ run(`mv segments/$(my_id).txt pool_storage/$(my_id)/`)
         device_ip = IPv4(read(get_ip,String))
         close(get_ip)
         write_sock = connect(device_ip,2001)
-        write(write_sock,"STORE,$(my_ip),$(my_id)\n")  #Init command to the storage pool device of the form STORE,dev_ip,dev_id\n
+        write(write_sock,"STORE,$(my_ip),$(my_id)\n")  #command to the storage pool device of the form STORE,dev_ip,dev_id\n
         open("segments/$(device).txt") do f
             #=while !eof(f)
                 write(write_sock,read(f,Char))
@@ -77,7 +77,7 @@ readline(stdin)
         device_ip = IPv4(read(get_ip,String))
         close(get_ip)
         read_sock = connect(device_ip,2001)
-        write(read_sock,"FWD,$(my_ip),$(my_id)\n")  #Init command to the storage pool device of the form STORE/FWD,dev_ip,dev_id\n
+        write(read_sock,"FWD,$(my_ip),$(my_id)\n")  #command to the storage pool device of the form STORE/FWD,dev_ip,dev_id\n
         open("pool_storage/$(my_id)/$(device).txt","w") do f
             #=while !eof(f)
                 write(write_sock,read(f,Char))

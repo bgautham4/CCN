@@ -30,7 +30,7 @@ server_ip = IPv4(data_arr[1])
 my_id = parse(Int,data_arr[2])
 N_pool = parse(Int,data_arr[3])
 pool_ids = [i for i in 1:N_pool if i!=my_id]
-#Initialize some directories..
+#Initialize some directories..(NOTE: Remeber to delete these directories before every run.)
 for i in 1:N_pool
     run(`mkdir -p pool_storage/$(i)`)
 end
